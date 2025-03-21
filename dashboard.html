@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Edoms Tally POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/sales.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'edoms-green': '#2D5A27',
+                        'edoms-light': '#A4D65E',
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-poppins">
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 w-64 bg-edoms-green text-white">
+        <div class="flex items-center justify-center h-16 border-b border-edoms-light">
+            <h1 class="text-xl font-bold">Edoms Tally</h1>
+        </div>
+        <nav class="mt-6">
+            <a href="dashboard.html" class="nav-item px-4 py-2 bg-edoms-light cursor-pointer block">
+                <i class="fas fa-home mr-2"></i> Dashboard
+            </a>
+            <a href="sales.html" class="nav-item px-4 py-2 hover:bg-edoms-light cursor-pointer block">
+                <i class="fas fa-shopping-cart mr-2"></i> Sales
+            </a>
+            <div class="nav-item px-4 py-2 hover:bg-edoms-light cursor-pointer block">
+                <i class="fas fa-box mr-2"></i> Inventory
+            </div>
+            <div class="nav-item px-4 py-2 hover:bg-edoms-light cursor-pointer block">
+                <i class="fas fa-users mr-2"></i> Customers
+            </div>
+            <div class="nav-item px-4 py-2 hover:bg-edoms-light cursor-pointer block">
+                <i class="fas fa-chart-bar mr-2"></i> Reports
+            </div>
+            <div class="nav-item px-4 py-2 hover:bg-edoms-light cursor-pointer block">
+                <i class="fas fa-cog mr-2"></i> Settings
+            </div>
+            <div id="logoutBtn" class="px-4 py-2 hover:bg-red-500 cursor-pointer mt-auto">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-64 p-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-edoms-green">Dashboard Overview</h2>
+                <p class="text-gray-600 user-welcome">Welcome back, Admin</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="newSaleBtn" class="bg-edoms-green text-white px-4 py-2 rounded-lg hover:bg-edoms-light">
+                    <i class="fas fa-plus mr-2"></i> New Sale
+                </button>
+                <div id="notificationsBtn" class="relative">
+                    <i class="fas fa-bell text-gray-600 text-xl cursor-pointer"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">3</span>
+                </div>
+                <img class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=Admin&background=2D5A27&color=fff" alt="Admin">
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500">Today's Sales</h3>
+                    <i class="fas fa-dollar-sign text-edoms-green text-xl"></i>
+                </div>
+                <p id="todaySales" class="text-2xl font-bold">$0.00</p>
+                <p class="text-sm text-green-500">+15% from yesterday</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500">Total Orders</h3>
+                    <i class="fas fa-shopping-bag text-edoms-green text-xl"></i>
+                </div>
+                <p id="totalOrders" class="text-2xl font-bold">0</p>
+                <p class="text-sm text-green-500">+8 new orders</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500">Low Stock Items</h3>
+                    <i class="fas fa-exclamation-triangle text-yellow-500 text-xl"></i>
+                </div>
+                <p id="lowStockItems" class="text-2xl font-bold">0</p>
+                <p class="text-sm text-yellow-500">Needs attention</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500">Active Customers</h3>
+                    <i class="fas fa-users text-edoms-green text-xl"></i>
+                </div>
+                <p id="activeCustomers" class="text-2xl font-bold">0</p>
+                <p class="text-sm text-green-500">+3 new today</p>
+            </div>
+        </div>
+
+        <!-- Recent Sales Table -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Recent Sales</h3>
+                <button class="text-edoms-green hover:text-edoms-light">View All</button>
+            </div>
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-gray-500 border-b">
+                        <th class="pb-3">Order ID</th>
+                        <th class="pb-3">Customer</th>
+                        <th class="pb-3">Product</th>
+                        <th class="pb-3">Amount</th>
+                        <th class="pb-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentSalesBody">
+                    <!-- Sales data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- New Sale Modal -->
+    <div id="newSaleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-edoms-green">New Sale</h2>
+                <button id="closeSaleModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="newSaleForm" class="space-y-6">
+                <!-- Customer Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Customer</label>
+                    <select id="customerSelect" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-edoms-light">
+                        <option value="">Select Customer</option>
+                    </select>
+                </div>
+
+                <!-- Product Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Products</label>
+                    <div id="productsList" class="space-y-4">
+                        <div class="product-entry flex items-center space-x-4">
+                            <select class="product-select flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-edoms-light">
+                                <option value="">Select Product</option>
+                            </select>
+                            <input type="number" min="1" value="1" class="quantity-input w-20 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-edoms-light">
+                            <button type="button" class="remove-product text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" id="addProductBtn" class="mt-2 text-sm text-edoms-green hover:text-edoms-light">
+                        <i class="fas fa-plus mr-1"></i> Add Another Product
+                    </button>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="border-t pt-4">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Order Summary</h3>
+                    <div id="orderSummary" class="space-y-2">
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Tax (10%):</span>
+                            <span id="tax">$0.00</span>
+                        </div>
+                        <div class="flex justify-between font-medium text-gray-900">
+                            <span>Total:</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button type="button" id="cancelSaleBtn" class="px-4 py-2 text-gray-700 hover:text-gray-900">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-edoms-green text-white px-6 py-2 rounded-md hover:bg-edoms-light">
+                        Create Sale
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
